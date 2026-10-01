@@ -1,0 +1,847 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>FORME, by Text</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: co-branded pitch. Live RCS phone demo as the hero, then SMS vs RCS, benchmarks,
+   the agent-memory module, the roadmap, and the beta-test plan.
+   Brand: FORME leads (black, white, warm sand, amber; Oswald uppercase display, Gotham-style body
+   via Montserrat). Structurely blue marks the platform layer. */
+:root{
+  --bg:#FFFFFF; --surface:#FFFFFF; --wash:#F3EFE8; --sand:#E3DCD0;
+  --ink:#0B0B0B; --muted:#5F5B55; --line:#E7E1D7;
+  --amber:#B36500; --amberfill:#CC7400; --charcoal:#262626; --teal:#2F7D6B; --rose:#A64B3C;
+  --sblue:#325FA6; --slogo-mark:#325FA6; --slogo-word:#1C2541; --flogo:#0B0B0B;
+  --display:"Oswald", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body:"Montserrat", "Gotham", "Helvetica Neue", Arial, sans-serif;
+  --mono:"Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  /* the phone screen is its own world (a messaging app) and stays light */
+  --scr:#F4F4F6; --scr-ink:#16161A; --scr-muted:#6C6C76; --mine:#325FA6;
+  --brandbtn:#0B0B0B; --brandbtn-bg:#EFE9DF; --brandbtn-line:#D9CFBF;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B0B0B; --surface:#171717; --wash:#1C1A17; --sand:#3A352E;
+  --ink:#F3EFE8; --muted:#ADA79D; --line:#2C2925;
+  --amber:#E8962A; --amberfill:#E8962A; --charcoal:#E3DCD0; --teal:#5FBFA8; --rose:#E08A7A;
+  --sblue:#7EA3E0; --slogo-mark:#7EA3E0; --slogo-word:#F3EFE8; --flogo:#F3EFE8; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B0B0B; --surface:#171717; --wash:#1C1A17; --sand:#3A352E;
+  --ink:#F3EFE8; --muted:#ADA79D; --line:#2C2925;
+  --amber:#E8962A; --amberfill:#E8962A; --charcoal:#E3DCD0; --teal:#5FBFA8; --rose:#E08A7A;
+  --sblue:#7EA3E0; --slogo-mark:#7EA3E0; --slogo-word:#F3EFE8; --flogo:#F3EFE8; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.62; padding-inline:20px}
+.wrap{max-width:1120px; margin:0 auto}
+h1,h2,h3{font-family:var(--display); font-weight:500; text-transform:uppercase; text-wrap:balance; margin:0; line-height:1.02; letter-spacing:.005em}
+p{margin:0}
+.eyebrow{font-family:var(--body); font-weight:600; font-size:11.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--amber)}
+
+/* top bar: co-brand lockup */
+.top{display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; padding-block:20px 6px}
+.lockup{display:flex; align-items:center; gap:16px}
+.slogo{height:26px; width:auto; display:block}
+.flogo{height:20px; width:auto; display:block; color:var(--flogo)}
+.x{font-family:var(--display); color:var(--muted); font-size:18px}
+.tag{font-family:var(--mono); font-size:11px; letter-spacing:.04em; text-transform:uppercase; border:1px solid var(--line); border-radius:2px; padding:5px 11px; color:var(--muted)}
+
+/* hero */
+.hero{display:grid; grid-template-columns:minmax(0,1fr) 370px; grid-template-areas:"intro phone" "tabs phone" "scene phone" "hood phone"; grid-template-rows:auto auto auto 1fr; column-gap:56px; align-items:start; padding-block:30px 60px}
+.intro{grid-area:intro} .tabs{grid-area:tabs} .scene{grid-area:scene} .hood{grid-area:hood} .phone-col{grid-area:phone; align-self:start}
+.hero h1{font-size:clamp(52px,8vw,104px); font-weight:600; letter-spacing:-.005em; line-height:.92; margin-top:16px}
+.hero h1 span{display:block}
+.hero h1 em{font-style:normal; color:var(--amber)}
+.lede{font-size:18px; color:var(--muted); max-width:34em; margin-top:22px}
+.lede b{color:var(--ink); font-weight:600}
+
+.tabs{display:flex; flex-wrap:wrap; gap:8px; margin-top:30px}
+.tab{font:500 14px var(--display); letter-spacing:.08em; text-transform:uppercase; color:var(--ink); background:var(--surface); border:1.5px solid var(--line); border-radius:2px; padding:9px 15px; cursor:pointer; display:flex; gap:8px; align-items:center}
+.tab:hover{border-color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.tab .dot{width:8px;height:8px;border-radius:50%}
+:focus-visible{outline:3px solid var(--amberfill); outline-offset:2px}
+.scene{margin-top:24px; display:grid; gap:8px}
+.scene h3{font-size:24px; letter-spacing:.02em}
+.scene p{color:var(--muted); max-width:36em}
+
+.hood{margin-top:22px; border-top:1px solid var(--line); padding-top:16px}
+.hood ol{list-style:none; padding:0; margin:12px 0 0; display:grid; gap:10px}
+.hood li{display:grid; grid-template-columns:92px minmax(0,1fr); gap:12px; align-items:baseline; font-size:14.5px; animation:rise .35s ease both}
+.hood li.empty{display:block; color:var(--muted); font-size:14px}
+.pill{font-family:var(--mono); font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; border-radius:2px; padding:3px 7px; text-align:center; font-weight:500; white-space:nowrap}
+.p-rcs{background:color-mix(in srgb,var(--sblue) 16%,transparent); color:var(--sblue)}
+.p-ai{background:color-mix(in srgb,var(--teal) 16%,transparent); color:var(--teal)}
+.p-com{background:color-mix(in srgb,var(--amberfill) 18%,transparent); color:var(--amber)}
+.p-ops{background:var(--sand); color:var(--ink)}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* phone */
+.phone-col,.phone,.screen,.screen>*,.thead>div,.row{min-width:0}
+.phone-col{width:100%; display:grid; gap:12px; justify-items:center; position:sticky; top:calc(env(safe-area-inset-top,0px) + 16px)}
+.phone{width:100%; max-width:360px; background:#111; border-radius:46px; padding:12px; box-shadow:0 30px 60px -30px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.08) inset}
+.screen{background:var(--scr); color:var(--scr-ink); border-radius:36px; overflow:hidden; height:660px; display:flex; flex-direction:column; font-family:var(--body)}
+.sbar{display:flex; justify-content:space-between; padding:12px 22px 4px; font:600 12px var(--body)}
+.thead{display:flex; align-items:center; gap:10px; padding:8px 14px 10px; border-bottom:1px solid #E4E4EA; background:#fff}
+.avatar{width:42px;height:42px;border-radius:50%; background:#0B0B0B; display:grid; place-items:center; flex:none; color:#fff}
+.avatar svg{width:30px; height:auto}
+.tname{font:600 15px var(--body); display:flex; align-items:center; gap:5px; letter-spacing:.06em}
+.tsub{font-size:11.5px; color:var(--scr-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.verified{width:15px;height:15px}
+.thread{flex:1; overflow-y:auto; padding:14px 12px 8px; display:flex; flex-direction:column; gap:8px; scroll-behavior:smooth}
+.row{display:flex; animation:rise .3s ease both}
+.row.me{justify-content:flex-end}
+.row>.carousel{min-width:0; flex:1 1 auto}
+.bub{max-width:84%; background:#fff; border-radius:18px 18px 18px 6px; padding:9px 13px; font-size:13.5px; line-height:1.45; box-shadow:0 1px 0 rgba(0,0,0,.04)}
+.me .bub{background:var(--mine); color:#fff; border-radius:18px 18px 6px 18px}
+.typing{display:inline-flex; gap:4px; padding:12px 14px}
+.typing span{width:6px;height:6px;border-radius:50%;background:#A3A3AE; animation:blink 1s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+.stamp{align-self:center; font-size:11px; color:var(--scr-muted); padding:4px 0}
+.read{align-self:flex-end; font-size:10.5px; color:var(--scr-muted); margin-top:-4px}
+
+.carousel{display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; margin-inline:-12px; padding-inline:12px; scroll-snap-type:x mandatory}
+.rc{flex:0 0 172px; scroll-snap-align:start; background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 1px 0 rgba(0,0,0,.05)}
+.rc.wide{flex-basis:auto; width:84%}
+.media{height:132px; display:grid; place-items:center; background:#EFE9DF}
+.media svg{height:116px; width:auto}
+.rc-body{padding:9px 11px 11px; display:grid; gap:2px}
+.rc-name{font:600 12.5px var(--body); line-height:1.3}
+.rc-sub{font-size:11.5px; color:var(--scr-muted)}
+.rc-price{font-family:var(--mono); font-size:12.5px; font-weight:500; margin-top:2px}
+.cbtns{display:grid; gap:6px; padding:0 11px 11px}
+.cbtn{font:500 12.5px var(--display); letter-spacing:.08em; text-transform:uppercase; color:var(--brandbtn); background:var(--brandbtn-bg); border:0; border-radius:2px; padding:8px 10px; cursor:pointer}
+.receipt{width:84%; background:#fff; border-radius:14px; padding:12px 13px; font-size:13px; display:grid; gap:6px}
+.receipt .ln{display:flex; justify-content:space-between; gap:10px}
+.receipt .ln span:last-child{font-family:var(--mono)}
+.receipt .tot{border-top:1px dashed #D9D9E0; padding-top:6px; font-weight:700}
+.receipt .ship{font-size:11.5px; color:#2F7D6B; font-weight:600}
+.paybtn{margin-top:4px; font:500 13px var(--display); letter-spacing:.08em; text-transform:uppercase; background:#0B0B0B; color:#fff; border:0; border-radius:2px; padding:11px; cursor:pointer}
+.ok{width:84%; background:#fff; border-radius:14px; padding:12px 13px; display:grid; grid-template-columns:30px minmax(0,1fr); gap:10px; align-items:start; font-size:13px}
+.ok .ck{width:30px;height:30px;border-radius:50%;background:#0B0B0B;color:#E8962A;display:grid;place-items:center;font-weight:800}
+.ok b{display:block; font-weight:700}
+.ok small{color:var(--scr-muted); font-size:11.5px}
+.chips{display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-end; padding:8px 12px 4px; min-height:48px; align-content:flex-start}
+.chip{font:600 12.5px var(--body); color:var(--brandbtn); background:#fff; border:1.5px solid var(--brandbtn-line); border-radius:99px; padding:7px 12px; cursor:pointer; animation:rise .25s ease both}
+.chip:hover{background:var(--brandbtn-bg)}
+.composer{display:flex; gap:8px; align-items:center; padding:8px 12px 14px}
+.composer div{flex:1; background:#fff; border-radius:99px; padding:9px 14px; font-size:13px; color:var(--scr-muted)}
+.composer span{font-family:var(--mono); font-size:10px; color:var(--scr-muted)}
+.phone-ctl{display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:center}
+.btn{font:500 13.5px var(--display); letter-spacing:.08em; text-transform:uppercase; background:transparent; color:var(--ink); border:1.5px solid var(--line); border-radius:2px; padding:7px 16px; cursor:pointer}
+.btn:hover{border-color:var(--ink)}
+.hint{font-size:13px; color:var(--muted); text-align:center}
+.powered{display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:11px; color:var(--muted)}
+
+/* sections */
+section.band{padding-block:72px; border-top:1px solid var(--line)}
+.shead{display:grid; gap:12px; max-width:46em; margin-bottom:34px}
+.shead h2{font-size:clamp(34px,4.6vw,56px)}
+.shead p{color:var(--muted); font-size:17px}
+.shead .eyebrow{color:var(--amber); font-size:11.5px}
+
+.vs{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px}
+.mini{background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:18px; display:grid; gap:12px; align-content:start}
+.mini h3{font-size:22px}
+.mini .from{font-family:var(--mono); font-size:12px; color:var(--muted)}
+.smsb{background:#E9E9EE; color:#16161A; border-radius:18px 18px 18px 6px; padding:10px 13px; font-size:14px; max-width:92%}
+.smsb u{color:#325FA6; word-break:break-all}
+.rcsprev{display:flex; gap:8px; overflow:hidden; background:var(--scr); border-radius:12px; padding:10px}
+.rcsprev .rc{flex:0 0 136px}
+.rcsprev .media{height:100px}.rcsprev .media svg{height:88px}
+.cmp{width:100%; border-collapse:collapse; font-size:15px; margin-top:24px}
+.cmp-wrap{overflow-x:auto}
+.cmp th,.cmp td{text-align:left; padding:11px 12px; border-bottom:1px solid var(--line); vertical-align:top}
+.cmp th{font-family:var(--mono); font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:500}
+.cmp td:first-child{font-weight:600; white-space:nowrap}
+.cmp td:last-child{color:var(--amber); font-weight:600}
+
+.stats{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:28px}
+.stat{display:grid; gap:6px; border-top:2px solid var(--ink); padding-top:14px}
+.stat .n{font-family:var(--display); font-weight:600; font-size:clamp(44px,5.4vw,64px); line-height:1; font-variant-numeric:tabular-nums}
+.stat:nth-child(1) .n{color:var(--ink)} .stat:nth-child(2) .n{color:var(--amber)} .stat:nth-child(3) .n{color:var(--teal)}
+.stat p{color:var(--muted); font-size:15px}
+.src{font-family:var(--mono); font-size:11.5px; color:var(--muted); margin-top:22px}
+
+/* memory module */
+.mem{background:var(--wash); border-radius:6px; padding:28px}
+.who{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:22px}
+.who button{font:600 14px var(--body); color:var(--ink); background:var(--surface); border:1.5px solid var(--line); border-radius:3px; padding:8px 15px; cursor:pointer; text-align:left}
+.who button small{display:block; font:400 12px var(--body); color:var(--muted)}
+.who button[aria-pressed="true"]{border-color:var(--ink); box-shadow:0 0 0 1px var(--ink) inset}
+.memgrid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) 40px minmax(0,1.25fr); gap:18px; align-items:start}
+.col h4{font:500 13px var(--display); letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 10px}
+.col ul{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+.buy{display:grid; grid-template-columns:44px minmax(0,1fr); gap:10px; align-items:center; background:var(--surface); border-radius:4px; padding:8px 10px; animation:rise .3s ease both}
+.buy .sw,.sugg .sw{border-radius:3px; background:#EFE9DF; display:grid; place-items:center}
+.buy .sw{width:44px; height:44px} .buy .sw svg{height:40px; width:auto}
+.buy b{font:600 13px var(--body); display:block; line-height:1.3}
+.buy span{font-size:12px; color:var(--muted)}
+.said{background:var(--surface); border-radius:12px 12px 12px 3px; padding:10px 12px; font-size:14px; animation:rise .3s ease both}
+.said span{display:block; font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:4px}
+.arrow{align-self:center; display:grid; place-items:center; gap:6px; color:var(--amber); font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; text-align:center}
+.arrow svg{width:36px; height:36px}
+.sugg{display:grid; grid-template-columns:56px minmax(0,1fr); gap:12px; background:var(--surface); border:1.5px solid color-mix(in srgb,var(--amberfill) 45%,var(--line)); border-radius:4px; padding:10px 12px; animation:rise .35s ease both}
+.sugg .sw{width:56px; height:56px} .sugg .sw svg{height:52px; width:auto}
+.sugg b{font:600 13.5px var(--body); display:block; line-height:1.3}
+.sugg .why{font-size:13px; color:var(--muted); margin-top:3px}
+.sugg .rank{font-family:var(--mono); font-size:11px; color:var(--amber); text-transform:uppercase; letter-spacing:.05em}
+.when{margin-top:12px; font-size:13.5px; color:var(--muted); display:flex; gap:8px; align-items:baseline}
+.when .pill{flex:none}
+.memfoot{margin-top:22px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; border-top:1px solid var(--line); padding-top:18px}
+.memfoot div{font-size:14px; color:var(--muted)}
+.memfoot b{display:block; color:var(--ink); font:500 15px var(--display); letter-spacing:.08em; text-transform:uppercase}
+
+/* roadmap */
+.road{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0}
+.stage{padding:0 24px 0 0; display:grid; gap:12px; align-content:start}
+.stage .line{height:4px; margin-right:-24px}
+.stage:nth-child(1) .line{background:var(--sblue)} .stage:nth-child(2) .line{background:var(--ink)} .stage:nth-child(3) .line{background:repeating-linear-gradient(90deg,var(--amberfill) 0 14px,transparent 14px 22px)}
+.stage:last-child .line{margin-right:0}
+.status{font-family:var(--mono); font-size:11.5px; letter-spacing:.05em; text-transform:uppercase}
+.stage:nth-child(1) .status{color:var(--sblue)} .stage:nth-child(2) .status{color:var(--ink)} .stage:nth-child(3) .status{color:var(--amber)}
+.stage h3{font-size:26px}
+.stage ul{margin:0; padding-left:18px; display:grid; gap:6px; color:var(--muted); font-size:15px}
+.stage ul b{color:var(--ink); font-weight:600}
+
+/* beta */
+.beta-hero{background:#0B0B0B; color:#F3EFE8; border-radius:4px; padding:32px; display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:28px; align-items:center; margin-bottom:44px; box-shadow:0 0 0 1px var(--line)}
+.beta-hero h3{font-size:clamp(30px,3.6vw,44px); font-weight:600}
+.beta-hero h3 em{font-style:normal; color:#E8962A}
+.beta-hero p{color:#CFC8BC; margin-top:12px}
+.phases{display:grid; gap:12px}
+.ph{display:grid; grid-template-columns:96px minmax(0,1fr); gap:12px; align-items:baseline; font-size:14.5px}
+.ph span{font-family:var(--mono); font-size:12px; color:#E8962A}
+.sub{font-size:26px; margin:0 0 16px}
+.cohorts{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-bottom:46px}
+.coh{border-top:3px solid var(--c); padding-top:12px; display:grid; gap:6px; align-content:start}
+.coh h4{font:600 15px var(--body); margin:0}
+.coh p{font-size:14px; color:var(--muted)}
+.coh small{font-family:var(--mono); font-size:11px; color:var(--c); text-transform:uppercase; letter-spacing:.05em}
+.plays{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-bottom:46px}
+.play{background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:20px; display:grid; grid-template-columns:44px minmax(0,1fr); gap:14px; align-items:start}
+.play .ic{width:44px; height:44px; border-radius:3px; display:grid; place-items:center; background:color-mix(in srgb,var(--c) 16%,transparent); color:var(--c)}
+.play .ic svg{width:24px; height:24px}
+.play h4{font:500 19px var(--display); letter-spacing:.04em; text-transform:uppercase; margin:0 0 6px}
+.play p{font-size:14.5px; color:var(--muted)}
+.score-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:4px; margin-bottom:12px}
+.score{width:100%; border-collapse:collapse; font-size:14.5px; min-width:640px}
+.score th,.score td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+.score thead th{font-family:var(--mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:500; background:var(--wash)}
+.score tbody tr:last-child td{border-bottom:0}
+.score .grp td{background:var(--sand); font:500 13px var(--display); letter-spacing:.14em; text-transform:uppercase; color:var(--ink); padding-block:7px}
+.score td:first-child{font-weight:600}
+.score td.tbd{font-family:var(--mono); font-size:12.5px; color:var(--muted)}
+.scorenote{font-size:13.5px; color:var(--muted); margin-bottom:46px}
+.measure{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:28px}
+.measure h3{font-size:22px; margin-bottom:12px}
+.measure ul{margin:0; padding-left:18px; display:grid; gap:7px; color:var(--muted); font-size:15px}
+.measure ul b{color:var(--ink); font-weight:600}
+
+.close{padding-block:80px 48px; border-top:1px solid var(--line); display:grid; gap:22px}
+.close h2{font-size:clamp(44px,6.4vw,88px); font-weight:600; line-height:.95; max-width:12em}
+.close h2 em{font-style:normal; color:var(--amber)}
+.sig{display:flex; gap:24px; flex-wrap:wrap; align-items:center; color:var(--muted); font-size:15px}
+.sig b{color:var(--ink)}
+.fine{font-size:12px; color:var(--muted); max-width:62em; padding-block:0 40px}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:minmax(0,1fr); grid-template-areas:"intro" "tabs" "phone" "scene" "hood"; grid-template-rows:none; padding-block:12px 40px}
+  .tabs{margin-top:24px; flex-wrap:nowrap; overflow-x:auto; margin-inline:-20px; padding:2px 20px 6px; scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:none; min-height:44px}
+  .phone-col{position:static; margin-top:16px}
+  .scene{margin-top:24px}
+  .stats,.road{grid-template-columns:minmax(0,1fr)}
+  .road{gap:28px} .stage{padding:0} .stage .line{margin-right:0}
+  .measure,.vs,.beta-hero,.plays{grid-template-columns:minmax(0,1fr)}
+  .cohorts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .memgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .memgrid .arrow{grid-column:1/-1; grid-auto-flow:column; justify-content:center}
+  .memgrid .arrow svg{transform:rotate(90deg)}
+  .memgrid .out{grid-column:1/-1}
+  .memfoot{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:600px){
+  body{padding-inline:16px; font-size:15px}
+  .tabs{margin-inline:-16px; padding-inline:16px}
+  .top{padding-block:14px 4px}
+  .slogo{height:22px} .flogo{height:17px}
+  .tag{font-size:10px}
+  .hero h1{font-size:clamp(48px,15vw,64px)}
+  .lede{font-size:16px; margin-top:16px}
+  .phone{max-width:none; border-radius:34px; padding:7px}
+  .screen{border-radius:28px; height:min(640px, calc(100svh - 120px)); min-height:480px}
+  .bub{max-width:88%; font-size:14px}
+  .rc{flex-basis:62%}
+  .rc.wide,.receipt,.ok{width:92%}
+  .chip{font-size:13.5px; padding:10px 14px; min-height:42px}
+  .cbtn{padding:10px; font-size:13.5px}
+  .paybtn{padding:12px; font-size:14px}
+  .btn{min-height:42px; padding:9px 18px}
+  .hood li{grid-template-columns:minmax(0,1fr); gap:6px}
+  .hood li .pill{justify-self:start}
+  section.band{padding-block:48px}
+  .shead{margin-bottom:24px}
+  .shead p{font-size:15.5px}
+  .rcsprev .rc{flex-basis:120px}
+  .smsb{max-width:100%}
+  .cmp thead{display:none}
+  .cmp,.cmp tbody,.cmp tr,.cmp td{display:block; width:100%}
+  .cmp tr{border-bottom:1px solid var(--line); padding-block:12px; display:grid; gap:4px}
+  .cmp td{border:0; padding:0}
+  .cmp td:first-child{font-family:var(--mono); font-size:11.5px; text-transform:uppercase; color:var(--muted); font-weight:500; white-space:normal}
+  .cmp td:nth-child(2)::before{content:"SMS: "; color:var(--muted)}
+  .cmp td:nth-child(3)::before{content:"RCS: "; color:var(--muted); font-weight:400}
+  .mem{padding:18px; margin-inline:-6px}
+  .memgrid{grid-template-columns:minmax(0,1fr)}
+  .who button{flex:1 1 140px}
+  .beta-hero{padding:22px}
+  .cohorts{grid-template-columns:minmax(0,1fr)}
+  .play{padding:16px}
+  .score-wrap{border:0; border-radius:0; overflow:visible}
+  .score{min-width:0}
+  .score thead{display:none}
+  .score,.score tbody{display:block}
+  .score tr{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:4px 12px; padding:12px 2px; border-bottom:1px solid var(--line)}
+  .score td{display:block; border:0; padding:0}
+  .score td:first-child,.score td:nth-child(2){grid-column:1/-1}
+  .score td:nth-child(2){color:var(--muted); font-size:14px}
+  .score td.tbd{font-size:12px}
+  .score td.tbd:nth-child(3)::before{content:"Baseline: "; font-family:var(--body); color:var(--muted)}
+  .score td.tbd:nth-child(4)::before{content:"Beta: "; font-family:var(--body); color:var(--muted)}
+  .score .grp{display:block; padding:0; border:0; margin-top:14px}
+  .score .grp td{padding:7px 10px}
+  .close{padding-block:52px 36px}
+}
+@media (prefers-reduced-motion: reduce){ *{animation:none!important; scroll-behavior:auto!important} }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="slogo" viewBox="0 0 92 24">
+    <path style="fill:var(--slogo-mark)" d="M0 6.34299C0 2.83986 2.83986 0 6.34301 0H19.7444C19.7444 3.50314 16.9045 6.34299 13.4014 6.34299H0Z"/>
+    <path style="fill:var(--slogo-mark)" d="M0.010498 8.83691C0.010498 12.34 2.85036 15.1799 6.35351 15.1799H19.7549C19.7549 11.6768 16.915 8.83691 13.4119 8.83691H0.010498Z"/>
+    <path style="fill:var(--slogo-mark)" d="M0 23.9992C0 20.4961 2.83986 17.6562 6.34301 17.6562H19.7444C19.7444 21.1594 16.9045 23.9992 13.4014 23.9992H0Z"/>
+    <path style="fill:var(--slogo-word)" d="M27.4459 13.6656C28.311 14.1874 29.4919 14.4483 30.1786 14.4483C30.7828 14.4483 31.0986 14.2286 31.0986 13.8029C31.0986 13.3498 30.7278 13.1987 30.2198 13.0339L29.849 12.8966C28.8603 12.5944 27.391 12.1276 27.391 10.1777C27.391 8.22767 28.8328 7.49982 30.8652 7.49982C31.7577 7.49982 32.6504 7.63719 33.4194 7.87063L33.2958 10.0677C32.4718 9.66955 31.3183 9.47726 30.7965 9.47726C30.206 9.47726 29.9177 9.7107 29.9177 10.109C29.9177 10.5072 30.2335 10.6995 30.7416 10.8642L31.3046 11.0427C32.2659 11.3311 33.7626 11.7843 33.7626 13.693C33.7626 15.4645 32.4718 16.4257 30.2747 16.4257C29.3272 16.4257 28.2561 16.2335 27.3086 15.8627L27.4459 13.6656ZM38.5363 16.1648C38.1106 16.3159 37.4927 16.4257 36.8885 16.4257C35.2543 16.4257 34.3343 15.643 34.3343 14.1188V11.3998H33.4692V9.73816C34.4167 9.54595 34.9522 8.94169 35.0758 7.98047H36.806V9.42234H38.5363V11.3998H36.806V13.5557C36.806 14.1325 37.067 14.3797 37.6712 14.3797C37.9184 14.3797 38.2891 14.3248 38.5363 14.2561V16.1648ZM38.9903 16.2884V9.42234H41.3248V10.9054C41.5995 9.86176 42.3822 9.28504 43.7279 9.28504V11.8667H43.0825C42.3273 11.8667 41.723 12.155 41.4621 12.6906V16.2884H38.9903ZM44.0564 14.0501V9.42234H46.5282V13.3223C46.5282 13.9814 46.8029 14.2973 47.3521 14.2973C47.7504 14.2973 48.1074 14.0913 48.3409 13.8579V9.42234H50.8127V16.2884H48.8352L48.6292 15.437C48.1898 16.0001 47.2697 16.4257 46.3085 16.4257C44.9353 16.4257 44.0564 15.492 44.0564 14.0501ZM51.2346 12.8417C51.2346 10.4935 52.7039 9.28504 54.9286 9.28504C55.6289 9.28504 56.3155 9.40865 56.8235 9.58717L56.6313 11.7843C56.3017 11.5783 55.7525 11.3723 55.2031 11.3723C54.3243 11.3723 53.775 11.8804 53.775 12.8829C53.775 13.8716 54.2832 14.3659 55.2856 14.3659C55.6563 14.3659 56.4254 14.2973 56.8648 14.1737L56.6862 16.1648C56.3017 16.3022 55.5465 16.4257 54.8873 16.4257C52.6902 16.4257 51.2346 15.1761 51.2346 12.8417ZM62.2447 16.1648C61.8189 16.3159 61.201 16.4257 60.5968 16.4257C58.9626 16.4257 58.0426 15.643 58.0426 14.1188V11.3998H57.1775V9.73816C58.125 9.54595 58.6606 8.94169 58.7842 7.98047H60.5144V9.42234H62.2447V11.3998H60.5144V13.5557C60.5144 14.1325 60.7753 14.3797 61.3795 14.3797C61.6267 14.3797 61.9975 14.3248 62.2447 14.2561V16.1648ZM62.591 14.0501V9.42234H65.0629V13.3223C65.0629 13.9814 65.3375 14.2973 65.8868 14.2973C66.285 14.2973 66.6421 14.0913 66.8755 13.8579V9.42234H69.3473V16.2884H67.3699L67.1639 15.437C66.7244 16.0001 65.8044 16.4257 64.8432 16.4257C63.47 16.4257 62.591 15.492 62.591 14.0501ZM70.0851 16.2884V9.42234H72.4194V10.9054C72.694 9.86176 73.4767 9.28504 74.8223 9.28504V11.8667H74.1773C73.422 11.8667 72.818 12.155 72.5571 12.6906V16.2884H70.0851ZM78.5477 16.4257C76.062 16.4257 74.6616 15.1349 74.6616 12.8417C74.6616 10.5072 76.1167 9.28504 78.2594 9.28504C80.3603 9.28504 81.4313 10.4386 81.4313 12.21C81.4313 12.6631 81.3629 13.0889 81.2663 13.4047H77.0371C77.133 13.9539 77.6274 14.6131 79.0832 14.6131C79.7694 14.6131 80.6623 14.4895 81.2115 14.3248L81.0465 16.0687C80.4288 16.261 79.44 16.4257 78.5477 16.4257ZM77.0097 12.1688H79.3167V12.0177C79.3167 11.2625 78.973 10.7956 78.2458 10.7956C77.4767 10.7956 77.0234 11.2899 77.0097 12.1688ZM81.84 14.3659V7.08789H84.3121V13.9128C84.3121 14.2286 84.4634 14.3797 84.7654 14.3797C84.8749 14.3797 85.0811 14.3522 85.2735 14.2973L85.3146 16.2197C84.8886 16.3434 84.3942 16.4257 83.9553 16.4257C82.5816 16.4257 81.84 15.6567 81.84 14.3659ZM85.0616 16.2472C85.5149 16.3983 86.0915 16.5219 86.5996 16.5219C87.52 16.5219 88.165 16.1511 88.4944 15.5743H86.3387C85.7211 13.7068 85.1164 10.6445 84.9931 9.42234H87.4789C87.5885 10.6308 88.0418 13.2674 88.3301 14.2835H88.4396C88.7279 13.2674 89.1812 10.6308 89.2915 9.42234H91.6533C91.5157 10.9741 90.8432 14.0639 90.2796 15.5332C89.6209 17.387 88.6321 18.4855 86.6681 18.4855C86.0367 18.4855 85.3088 18.3757 84.8973 18.1972L85.0616 16.2472Z"/>
+  </symbol>
+  <symbol id="flogo" viewBox="0 0 80 16">
+    <path fill="currentColor" d="M0.575684 0.797862L0.726527 0.838147C1.73829 1.10183 2.31959 1.96613 2.31959 2.76817V15.2895H4.88393V8.1554H10.6307V7.25082H4.88393V1.4937H11.7676V0.592773H0.575684V0.797862Z"/>
+    <path fill="currentColor" d="M21.5176 0.27832C18.0739 0.27832 14.3911 2.28159 14.3911 7.89955C14.3911 12.6825 17.0548 15.5391 21.5176 15.5391C25.9803 15.5391 28.644 12.6825 28.644 7.89955C28.6403 2.28159 24.9612 0.27832 21.5176 0.27832ZM21.5176 14.7847C18.7178 14.7847 17.0438 12.2101 17.0438 7.90321C17.0438 3.65495 18.7582 1.0181 21.5176 1.0181C24.2769 1.0181 25.9914 3.65495 25.9914 7.89955C25.9914 12.2101 24.3174 14.7847 21.5176 14.7847Z"/>
+    <path fill="currentColor" d="M43.8864 4.93991C43.8864 2.1346 41.6274 0.592773 37.9005 0.592773H31.1235V0.797862L31.3001 0.819835C32.3303 0.948016 32.8674 1.77936 32.8674 2.53013V15.2822H35.4318V1.4937H37.4443C39.4052 1.4937 41.4251 2.07234 41.4251 4.93991C41.4251 6.26932 40.7959 7.44858 39.5561 8.00525C38.5075 8.47402 37.4001 8.52529 36.9255 8.52529C36.7452 8.52529 36.6385 8.51797 36.6349 8.51797L36.1161 8.48501L42.3964 15.2859H45.2992L40.0233 9.55806C41.3478 9.23212 43.8864 8.09681 43.8864 4.93991Z"/>
+    <path fill="currentColor" d="M79.3674 1.4937V0.592773H68.1755V0.797862L68.3227 0.838147C69.3529 1.12381 69.9194 1.72808 69.9194 2.53745V15.2859H79.3674V14.3813H72.4838V8.1554H78.2306V7.25082H72.4838V1.4937H79.3674Z"/>
+    <path fill="currentColor" d="M56.8922 11.1592L51.8371 0.707037L51.7672 0.589844H47.687V0.798594L47.8342 0.838879C48.8607 1.12454 49.4272 1.72515 49.4309 2.53086V15.2866H50.6193V4.18621L56.0864 15.5173L61.6861 3.74674V15.2866H64.2504V0.593506H61.8627L56.8922 11.1592Z"/>
+  </symbol>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <div class="lockup">
+      <svg class="slogo" viewBox="0 0 92 24" role="img" aria-label="Structurely"><use href="#slogo"/></svg>
+      <span class="x" aria-hidden="true">×</span>
+      <svg class="flogo" viewBox="0 0 80 16" role="img" aria-label="FORME"><use href="#flogo"/></svg>
+    </div>
+    <span class="tag">Concept demo · prepared Oct 2026</span>
+  </header>
+
+  <div class="hero">
+    <div class="intro">
+      <p class="eyebrow">RCS + AI for connected fitness</p>
+      <h1><span>Go beyond</span><span><em>the text.</em></span></h1>
+      <p class="lede">FORME already texts its members. RCS turns those texts into a <b>branded, verified conversation</b> that books live trainers, sells programs and fills demo calendars, right inside the phone's own messaging app. Structurely puts an AI agent behind it that knows your hardware, your programs and every member's training history. Pick a moment and tap through it on the phone.</p>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Customer moments" id="tabs"></div>
+    <div class="scene" id="scene"></div>
+
+    <div class="hood">
+      <p class="eyebrow">What's happening under the hood</p>
+      <ol id="hood"></ol>
+    </div>
+
+    <div class="phone-col">
+      <div class="phone" aria-label="Phone showing an RCS conversation">
+        <div class="screen">
+          <div class="sbar"><span>9:41</span><span>RCS · 5G</span></div>
+          <div class="thead">
+            <div class="avatar"><svg viewBox="0 0 80 16" aria-hidden="true"><use href="#flogo"/></svg></div>
+            <div>
+              <div class="tname">FORME
+                <svg class="verified" viewBox="0 0 16 16" aria-label="Verified sender"><path fill="#325FA6" d="M8 0l2 1.6 2.5-.2.8 2.4 2.1 1.4-.8 2.4.8 2.4-2.1 1.4-.8 2.4-2.5-.2L8 16l-2-1.6-2.5.2-.8-2.4L.6 10.8l.8-2.4-.8-2.4 2.1-1.4.8-2.4 2.5.2z"/><path d="M4.8 8.2l2.1 2.1 4.3-4.4" stroke="#fff" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+              </div>
+              <div class="tsub">Verified business · Strength, mobility, recovery</div>
+            </div>
+          </div>
+          <div class="thread" id="thread" aria-live="polite"></div>
+          <div class="chips" id="chips"></div>
+          <div class="composer"><div>RCS message</div><span>AI-assisted</span></div>
+        </div>
+      </div>
+      <div class="phone-ctl">
+        <button class="btn" id="replay" type="button">Replay</button>
+        <button class="btn" id="auto" type="button">Autoplay</button>
+      </div>
+      <p class="hint">Tap the suggested replies to move the conversation.</p>
+      <span class="powered">Agent powered by <svg viewBox="0 0 92 24" class="slogo" style="height:14px" aria-label="Structurely"><use href="#slogo"/></svg></span>
+    </div>
+  </div>
+
+  <section class="band">
+    <div class="shead">
+      <p class="eyebrow">Same message, two channels</p>
+      <h2>What members see today vs. what they could see.</h2>
+      <p>RCS is the upgrade built into the default messaging app on Android and, since iOS 18, iPhone. No app to download. FORME already collects text consent at signup, so the audience is there. Phones that can't receive RCS get a regular SMS automatically.</p>
+    </div>
+    <div class="vs">
+      <div class="mini">
+        <h3>Plain SMS</h3>
+        <span class="from">From: 5-digit short code</span>
+        <div class="smsb">FORME: New 12-week golf fitness program is live. Add swing speed this off-season: <u>https://frme.co/g7Q2kx</u> Reply STOP to end</div>
+        <p style="color:var(--muted);font-size:14px">Text and a link. You learn whether it was delivered, and that's about it.</p>
+      </div>
+      <div class="mini">
+        <h3>RCS</h3>
+        <span class="from">From: FORME ✓ verified, with logo and brand colors</span>
+        <div class="rcsprev" id="rcsprev"></div>
+        <p style="color:var(--muted);font-size:14px">Swipe the options, book a coach, start a program without leaving the thread. You see reads, taps, bookings and purchases.</p>
+      </div>
+    </div>
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <thead><tr><th></th><th>SMS</th><th>RCS with Structurely</th></tr></thead>
+        <tbody>
+          <tr><td>Who it's from</td><td>A number</td><td>FORME's name, logo and a verified badge</td></tr>
+          <tr><td>Content</td><td>A link to tap</td><td>Rich cards for hardware, programs and coaches</td></tr>
+          <tr><td>Actions</td><td>Type a reply</td><td>Buttons: book a coach, start a program, schedule a demo</td></tr>
+          <tr><td>Checkout</td><td>Leave for the website</td><td>Pay for programs and training in the thread</td></tr>
+          <tr><td>Replies</td><td>Keyword auto-responder</td><td>AI agent that answers, qualifies and books 24/7</td></tr>
+          <tr><td>What you learn</td><td>Delivered</td><td>Read, tapped, booked, bought, and each member's goals</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="shead">
+      <p class="eyebrow">Why now</p>
+      <h2>The channel crossed the line in the last 18 months.</h2>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="n">iOS 18</span><p>Apple added RCS, which removed the main barrier for US brands. Every modern iPhone and Android phone can now show rich messages.</p></div>
+      <div class="stat"><span class="n">73–92%</span><p>Read rates reported for in-market RCS campaigns, with click-through rates up to 7% and a 20% conversion lift over traditional channels.</p></div>
+      <div class="stat"><span class="n">60–70%</span><p>Higher conversion reported by brands using RCS rich cards compared with MMS.</p></div>
+    </div>
+    <p class="src">Industry benchmarks, not FORME results. Sources: Infobip RCS statistics 2026 (citing Webex/MobileSquared and Infobip Messaging Trends 2025).</p>
+  </section>
+
+  <section class="band">
+    <div class="shead">
+      <p class="eyebrow">An agent with a memory</p>
+      <h2>Every workout and every text makes the next suggestion smarter.</h2>
+      <p>The agent keeps each member's training history, purchases and past conversations in context. It reasons about their goals, what they already own and what they asked for, then puts the most relevant program, coach or upgrade in front of them at the right moment. Pick a member to see it work.</p>
+    </div>
+    <div class="mem">
+      <div class="who" id="who" role="group" aria-label="Choose a member"></div>
+      <div class="memgrid">
+        <div class="col"><h4>What they did</h4><ul id="m-buy"></ul></div>
+        <div class="col"><h4>What they told us</h4><ul id="m-said"></ul></div>
+        <div class="arrow" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M6 18h22M20 10l8 8-8 8" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>AI reasons</div>
+        <div class="col out"><h4>What the agent suggests next</h4><ul id="m-sugg"></ul><p class="when" id="m-when"></p></div>
+      </div>
+      <div class="memfoot">
+        <div><b>Remembers conversations</b>A sore back mentioned in September shapes an offer in October.</div>
+        <div><b>Reads training behavior</b>Class types, frequency, assessments, coaches and purchases.</div>
+        <div><b>Acts on it</b>Suggests, explains why, and sends it when they usually train.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="shead">
+      <p class="eyebrow">What we're building toward</p>
+      <h2>From a better text to a front desk that lives in the thread.</h2>
+      <p>Structurely already runs AI voice and SMS agents that qualify, answer and book across about 20 million leads. RCS gives those agents a branded storefront.</p>
+    </div>
+    <div class="road">
+      <div class="stage">
+        <div class="line"></div>
+        <span class="status">Live today</span>
+        <h3>AI agents that talk and book</h3>
+        <ul>
+          <li><b>SMS and voice agents</b> answering every inbound question, any hour</li>
+          <li><b>Qualification and routing</b> for commercial and golf demo requests</li>
+          <li><b>Appointment booking</b> for demos, consultations and live sessions</li>
+        </ul>
+      </div>
+      <div class="stage">
+        <div class="line"></div>
+        <span class="status">Rolling out</span>
+        <h3>Rich, verified messaging</h3>
+        <ul>
+          <li><b>Verified brand sender</b> with FORME's logo and colors</li>
+          <li><b>Carousels and rich cards</b> for hardware, programs and coaches</li>
+          <li><b>Suggested replies</b> and read and tap analytics</li>
+          <li><b>Automatic SMS fallback</b> for older phones</li>
+        </ul>
+      </div>
+      <div class="stage">
+        <div class="line"></div>
+        <span class="status">Building toward</span>
+        <h3>The thread is the front desk</h3>
+        <ul>
+          <li><b>FORME data connected to the agent</b>: programs, trainer schedules, usage and orders</li>
+          <li><b>Checkout in the thread</b> for programs, training and accessories</li>
+          <li><b>AI cross-sell</b>: golf programs, live coaching, Barre, Hyperice and Fitbench bundles</li>
+          <li><b>Learned preferences</b>: goals, class types, schedule and coach fit</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="shead">
+      <p class="eyebrow">FORME RCS beta</p>
+      <h2>A beta test built to become the case study.</h2>
+      <p>FORME runs RCS first. We measure every result against your current email and SMS, and turn the numbers into a joint success story for connected fitness and other premium hardware brands.</p>
+    </div>
+
+    <div class="beta-hero">
+      <div>
+        <h3>12 weeks. One brand. <em>Results we can publish together.</em></h3>
+        <p>The measurement plan is the point. A clean control group and agreed metrics from day one are what make the results credible to the next brand.</p>
+      </div>
+      <div class="phases">
+        <div class="ph"><span>Weeks 1–2</span>Connect your store and member data, train the agent on FORME's voice and offers, register the verified sender</div>
+        <div class="ph"><span>Weeks 3–10</span>Live with the four plays below, weekly review with your team</div>
+        <div class="ph"><span>Weeks 11–12</span>Readout, ROI and the case study draft for your approval</div>
+      </div>
+    </div>
+
+    <h3 class="sub">Who we test</h3>
+    <div class="cohorts">
+      <div class="coh" style="--c:var(--amber)"><small>Members</small><h4>Active members and app users</h4><p>Studio and Lift owners and app users. Offered live coaching, programs and bundles based on how they train.</p></div>
+      <div class="coh" style="--c:var(--teal)"><small>Members</small><h4>Lapsed users and past leads</h4><p>Members who stopped training and past demo or purchase inquiries. The database you already have, reactivated.</p></div>
+      <div class="coh" style="--c:var(--sblue)"><small>Commercial</small><h4>Clubs, hotels and residential</h4><p>Country clubs, golf academies, hotels, residential buildings and PT clinics, plus current partners ready to expand.</p></div>
+      <div class="coh" style="--c:var(--muted)"><small>Control</small><h4>Holdout group</h4><p>A matched slice stays on today's email and SMS, so every lift we report is measured, not estimated.</p></div>
+    </div>
+
+    <h3 class="sub">What we run</h3>
+    <div class="plays">
+      <div class="play" style="--c:var(--teal)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg></span><div><h4>Activate the existing database</h4><p>Re-engage members, lapsed users and past demo requests with RCS offers built from their own training history and past conversations.</p></div></div>
+      <div class="play" style="--c:var(--amber)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4M20 10v4M7 7v10M17 7v10M7 12h10"/></svg></span><div><h4>Cross-sell and upsell</h4><p>Live 1:1 training and memberships, golf programs and TPI coaching, Barre, Hyperice and Fitbench bundles, and second units for commercial partners.</p></div></div>
+      <div class="play" style="--c:var(--rose)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></span><div><h4>Client experience</h4><p>Offers and bookings delivered over RCS, then a short satisfaction and experience survey in the same thread after each session or install.</p></div></div>
+      <div class="play" style="--c:var(--sblue)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/><path d="M3 21h18"/></svg></span><div><h4>Recruit new commercial partners</h4><p>The agent reaches clubs, golf academies, hotels and residential properties, sends the right hardware and program cards, qualifies the space and books demos.</p></div></div>
+    </div>
+
+    <h3 class="sub">What we measure</h3>
+    <div class="score-wrap">
+      <table class="score">
+        <thead><tr><th>Metric</th><th>How it's measured</th><th>Today (baseline)</th><th>Beta (RCS + AI)</th></tr></thead>
+        <tbody>
+          <tr class="grp"><td colspan="4">Conversion</td></tr>
+          <tr><td>Read and tap rate</td><td>RCS reads and button taps vs. email opens and SMS clicks</td><td class="tbd">Week 2</td><td class="tbd">Live</td></tr>
+          <tr><td>Conversion rate</td><td>Purchases and bookings ÷ messages delivered, beta vs. holdout</td><td class="tbd">Week 2</td><td class="tbd">Live</td></tr>
+          <tr class="grp"><td colspan="4">Revenue</td></tr>
+          <tr><td>Revenue per message</td><td>Attributed revenue ÷ messages sent</td><td class="tbd">Week 2</td><td class="tbd">Live</td></tr>
+          <tr><td>Training and program revenue</td><td>Live 1:1, memberships and programs sold through the thread</td><td class="tbd">Week 2</td><td class="tbd">Live</td></tr>
+          <tr><td>Incremental revenue</td><td>Beta revenue minus holdout revenue, per member</td><td class="tbd">—</td><td class="tbd">Week 12</td></tr>
+          <tr class="grp"><td colspan="4">ROI</td></tr>
+          <tr><td>Return on spend</td><td>Incremental revenue ÷ total program cost</td><td class="tbd">—</td><td class="tbd">Week 12</td></tr>
+          <tr><td>Cost per booking</td><td>Program cost ÷ demos and sessions booked, vs. current channels</td><td class="tbd">Week 2</td><td class="tbd">Live</td></tr>
+          <tr class="grp"><td colspan="4">Engagement and retention</td></tr>
+          <tr><td>Reactivation</td><td>Share of lapsed users who train again within 30 days</td><td class="tbd">Week 2</td><td class="tbd">Live</td></tr>
+          <tr><td>Workouts per member</td><td>Weekly sessions on Studio, Lift and app, beta vs. holdout</td><td class="tbd">Week 2</td><td class="tbd">Live</td></tr>
+          <tr class="grp"><td colspan="4">Client experience</td></tr>
+          <tr><td>Satisfaction score</td><td>In-thread survey after sessions, purchases and installs</td><td class="tbd">Week 2</td><td class="tbd">Live</td></tr>
+          <tr><td>Opt-out rate</td><td>Unsubscribes ÷ messages sent, vs. SMS today</td><td class="tbd">Week 2</td><td class="tbd">Live</td></tr>
+          <tr class="grp"><td colspan="4">New commercial partners</td></tr>
+          <tr><td>Qualified conversations</td><td>Clubs, hotels and properties that engage and fit</td><td class="tbd">—</td><td class="tbd">Live</td></tr>
+          <tr><td>Demos, proposals and units</td><td>Demos booked, proposals sent, units sold and expansion orders</td><td class="tbd">—</td><td class="tbd">Week 12</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="scorenote">Baselines come from your current email, SMS and sales numbers in the first two weeks. Beta numbers update weekly in a shared dashboard; the final readout uses the holdout group to show true lift.</p>
+
+    <div class="measure">
+      <div>
+        <h3>What the case study will answer</h3>
+        <ul>
+          <li><b>Conversion improvement:</b> does RCS + AI convert better than email and SMS for a premium fitness brand?</li>
+          <li><b>Revenue improvement:</b> how much more revenue per member, and how much from training, programs and bundles?</li>
+          <li><b>ROI:</b> what did every dollar of program cost return?</li>
+          <li><b>Retention:</b> do members train more and come back sooner?</li>
+          <li><b>Client experience:</b> do members rate it higher, and do fewer opt out?</li>
+          <li><b>Growth:</b> can the same agent fill the commercial demo calendar?</li>
+        </ul>
+      </div>
+      <div>
+        <h3>How we'd run it</h3>
+        <ul>
+          <li>Opted-in members and customers only, using the text consent FORME already collects; commercial prospects through permission-based business outreach</li>
+          <li>FORME's voice, offers and policies trained into the agent and approved by your team</li>
+          <li>Hand-off to a person anytime a member or partner asks, or the agent is unsure</li>
+          <li>Structurely builds and manages it; FORME reviews weekly</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="close">
+    <p class="eyebrow">Next step</p>
+    <h2>Let's put FORME in the thread and <em>go beyond the text.</em></h2>
+    <div class="sig">
+      <svg class="slogo" viewBox="0 0 92 24" role="img" aria-label="Structurely"><use href="#slogo"/></svg>
+      <span><b>Corey</b>, CEO, Structurely</span><span>Fort Myers, Florida</span>
+    </div>
+  </section>
+  <p class="fine">This is a concept demo built by Structurely for FORME. It is not a live FORME channel. Logos are the property of their owners. Product names, features and listed prices come from formelife.com as of October 2026 and should be confirmed; member names, conversations, schedules, class names and results are illustrative. Benchmark figures are third-party industry data.</p>
+</div>
+
+<script>
+/* ---------- illustrations: generic devices and gear ---------- */
+const INK='#0B0B0B', AMB='#CC7400', SAND='#E3DCD0';
+const screenFig=`<rect x="44" y="30" width="32" height="62" rx="2" fill="#2E2C29"/><circle cx="60" cy="48" r="5" fill="${SAND}"/><path d="M52 72 Q60 56 68 72 L66 86 L54 86Z" fill="${SAND}"/><rect x="47" y="34" width="10" height="2" fill="${AMB}"/>`;
+const SH={
+  studio:`<rect x="38" y="6" width="44" height="106" rx="5" fill="${INK}"/><rect x="42" y="10" width="36" height="98" rx="2" fill="#3A3733"/><g transform="translate(0,4)">${screenFig}</g>`,
+  lift:`<rect x="38" y="6" width="44" height="106" rx="5" fill="${INK}"/><rect x="42" y="10" width="36" height="98" rx="2" fill="#3A3733"/><g transform="translate(0,4)">${screenFig}</g><path d="M38 40 L14 26" stroke="${INK}" stroke-width="7" stroke-linecap="round"/><path d="M82 40 L106 26" stroke="${INK}" stroke-width="7" stroke-linecap="round"/><path d="M14 26 L20 60 M106 26 L100 60" stroke="${AMB}" stroke-width="1.6"/><circle cx="20" cy="62" r="4" fill="${AMB}"/><circle cx="100" cy="62" r="4" fill="${AMB}"/>`,
+  golf:`<circle cx="60" cy="58" r="40" fill="#fff" stroke="${INK}" stroke-width="2.5"/><path d="M42 92 L72 28" stroke="${INK}" stroke-width="4" stroke-linecap="round"/><path d="M72 28 L84 26 L82 34 Z" fill="${INK}"/><circle cx="40" cy="90" r="6" fill="#fff" stroke="${INK}" stroke-width="2"/><path d="M30 48 Q60 20 92 52" fill="none" stroke="${AMB}" stroke-width="3" stroke-dasharray="4 5"/>`,
+  program:`<rect x="26" y="10" width="68" height="98" rx="4" fill="#fff" stroke="${INK}" stroke-width="2.5"/><rect x="46" y="4" width="28" height="12" rx="3" fill="${INK}"/>${[0,1,2,3].map(r=>[0,1,2].map(c=>`<rect x="${34+c*19}" y="${26+r*19}" width="14" height="14" rx="2" fill="${(r*3+c)<5?AMB:SAND}"/>`).join('')).join('')}`,
+  tpi:`<rect x="24" y="12" width="72" height="94" rx="4" fill="#fff" stroke="${INK}" stroke-width="2.5"/><circle cx="60" cy="40" r="9" fill="${INK}"/><path d="M60 50 L60 78 M60 58 L44 66 M60 58 L78 50 M60 78 L50 96 M60 78 L70 96" stroke="${INK}" stroke-width="4" stroke-linecap="round"/><path d="M40 66 A26 26 0 0 1 82 46" fill="none" stroke="${AMB}" stroke-width="2.5" stroke-dasharray="3 4"/>`,
+  coach:`<circle cx="60" cy="58" r="44" fill="${SAND}"/><circle cx="60" cy="46" r="15" fill="${INK}"/><path d="M30 96 Q60 62 90 96 Z" fill="${INK}"/><path d="M43 44 A17 17 0 0 1 77 44" fill="none" stroke="${AMB}" stroke-width="3"/><rect x="74" y="44" width="5" height="10" rx="2" fill="${AMB}"/>`,
+  coach2:`<circle cx="60" cy="58" r="44" fill="#D8E3DE"/><circle cx="60" cy="46" r="15" fill="${INK}"/><path d="M30 96 Q60 62 90 96 Z" fill="${INK}"/><path d="M84 30 l6 -6 m-2 10 h8" stroke="${AMB}" stroke-width="3" stroke-linecap="round"/>`,
+  coach3:`<circle cx="60" cy="58" r="44" fill="#EAD9D3"/><circle cx="60" cy="46" r="15" fill="${INK}"/><path d="M30 96 Q60 62 90 96 Z" fill="${INK}"/><path d="M24 92 Q60 80 96 92" stroke="${AMB}" stroke-width="3" fill="none"/>`,
+  membership:`<rect x="14" y="30" width="92" height="58" rx="6" fill="${INK}"/><use href="#flogo" x="24" y="40" width="40" height="8" style="color:#F3EFE8"/><rect x="24" y="66" width="34" height="5" rx="2" fill="${AMB}"/><rect x="24" y="76" width="22" height="4" rx="2" fill="#6B655C"/>`,
+  barre:`<rect x="14" y="54" width="92" height="7" rx="3.5" fill="${INK}"/><rect x="22" y="40" width="7" height="34" rx="2" fill="#5A5650"/><rect x="91" y="40" width="7" height="34" rx="2" fill="#5A5650"/><path d="M40 92 Q60 70 80 92" stroke="${AMB}" stroke-width="3" fill="none"/>`,
+  hyper:`<rect x="30" y="36" width="56" height="20" rx="10" fill="${INK}"/><rect x="50" y="54" width="16" height="48" rx="6" fill="${INK}"/><circle cx="26" cy="46" r="11" fill="${AMB}"/><path d="M92 40 l8 -4 M92 52 l8 4" stroke="${AMB}" stroke-width="3" stroke-linecap="round"/>`,
+  bench:`<rect x="12" y="46" width="96" height="14" rx="4" fill="${INK}"/><path d="M26 60 L20 96 M94 60 L100 96 M60 60 L60 96" stroke="#5A5650" stroke-width="6" stroke-linecap="round"/><rect x="16" y="40" width="40" height="8" rx="3" fill="${AMB}"/>`,
+  klass:`<rect x="12" y="20" width="96" height="76" rx="4" fill="${INK}"/><path d="M52 44 L74 58 L52 72 Z" fill="${AMB}"/><rect x="20" y="82" width="56" height="4" rx="2" fill="#6B655C"/>`,
+  klass2:`<rect x="12" y="20" width="96" height="76" rx="4" fill="#2E2C29"/><path d="M52 44 L74 58 L52 72 Z" fill="${SAND}"/><rect x="20" y="82" width="70" height="4" rx="2" fill="${AMB}"/>`,
+  club:`<rect x="10" y="54" width="100" height="50" fill="#fff" stroke="${INK}" stroke-width="2.5"/><path d="M6 56 L60 18 L114 56" fill="${SAND}" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/><rect x="50" y="74" width="20" height="30" fill="${INK}"/><path d="M84 18 L84 46 M84 18 L98 24 L84 30" stroke="${AMB}" stroke-width="2.5" fill="${AMB}"/>`,
+  survey:`<rect x="18" y="20" width="84" height="80" rx="6" fill="#fff" stroke="${INK}" stroke-width="2.5"/>${[0,1,2,3,4].map(i=>`<path transform="translate(${26+i*14},48) scale(.55)" d="M12 2l3 6.5 7 .9-5 4.8 1.3 7L12 17.8 5.7 21.2 7 14.2 2 9.4l7-.9z" fill="${i<4?AMB:SAND}"/>`).join('')}<rect x="30" y="76" width="60" height="5" rx="2" fill="${SAND}"/>`,
+  cal:`<rect x="18" y="18" width="84" height="84" rx="6" fill="#fff" stroke="${INK}" stroke-width="2.5"/><rect x="18" y="18" width="84" height="20" rx="6" fill="${INK}"/>${[0,1,2,3].map(r=>[0,1,2,3,4].map(c=>`<rect x="${26+c*14}" y="${46+r*13}" width="10" height="9" rx="1.5" fill="${r==1&&c==3?AMB:SAND}"/>`).join('')).join('')}`
+};
+function art(shape){return `<svg viewBox="0 0 120 116" aria-hidden="true">${SH[shape]}</svg>`;}
+
+/* ---------- items (names and prices from formelife.com) ---------- */
+const P={
+  studio:{name:'FORME Studio',sub:'43" 4K wall-mounted display',g:'studio'},
+  lift:{name:'FORME Lift',sub:'Up to 200 lbs smart cable resistance',g:'lift'},
+  golfp:{name:'FORME Golf',sub:'TPI-based golf fitness programs',g:'golf'},
+  tpi:{name:'Live TPI coaching',sub:'1:1 with TPI-certified trainers',g:'tpi'},
+  golf12:{name:'12-Week Golf Fitness Program',price:799,g:'program'},
+  golf1:{name:'Golf First Month',price:49,g:'golf'},
+  c1:{name:'Strength coach',sub:'Form and technique',g:'coach'},
+  c2:{name:'Performance coach',sub:'Power and athletic training',g:'coach2'},
+  c3:{name:'Mobility coach',sub:'Joint health and recovery',g:'coach3'},
+  member:{name:'Personal Training Membership',price:149,per:'/mo',g:'membership'},
+  barre:{name:'Barre Training Bundle',sub:'Integrated barre + barre programs',price:395,g:'barre'},
+  hyper:{name:'Hyperice Recovery Bundle',sub:'Hypervolt + guided recovery',g:'hyper'},
+  bench:{name:'Fitbench Strength Bundle',sub:'Fitbench + bench programs',g:'bench'},
+  k1:{name:'Barre Basics · 20 min',sub:'No equipment',g:'klass'},
+  k2:{name:'Travel mobility · 15 min',sub:'Loosen up after a flight',g:'klass'},
+  k3:{name:'Full-body HIIT · 20 min',sub:'Bodyweight only',g:'klass2'},
+  k4:{name:'Recovery stretch · 25 min',sub:'Wind down',g:'klass2'},
+  club:{name:'Country club account',g:'club'},
+  survey:{name:'Session survey',g:'survey'},
+  cal:{name:'Calendar',g:'cal'}
+};
+
+/* ---------- scenarios ---------- */
+const SC={
+  demo:{label:'Club demo',dot:'#325FA6',title:'A club inquiry becomes a booked demo',
+    blurb:'A golf academy director texts in after seeing the Lift at an event. The agent qualifies the space and volume, shows the right hardware and programs, and books an on-site demo.',
+    beats:[
+      {stamp:'Mon 8:40 AM'},
+      {in:'Hi, I run the golf academy at our club. Saw the FORME Lift at a demo day. What would it take to put one in our hitting bay?'},
+      {b:'text',t:'Great fit. The Lift was built for that. A couple of quick questions so I can tailor it. Where would it go?',note:['ai','Inbound lead answered in seconds and qualified in conversation.']},
+      {u:['Hitting bay','Fitness room','Both']},
+      {b:'text',t:'And roughly how many members train with your academy each week?'},
+      {u:['Under 50','50–150','150+']},
+      {b:'carousel',items:['lift','golfp','tpi'],btn:'See details',note:['rcs','Rich cards for the hardware, the golf programs and live TPI coaching.']},
+      {b:'text',t:'Academies your size usually start with one Lift in the bay plus TPI virtual coaching for members. Want to see it in person? Our team can demo it at your club or by video.'},
+      {u:['On-site demo','Video demo']},
+      {b:'ok',t:'Booked · Thursday, 10:00 AM ET',sub:'On-site FORME Golf demo. A custom proposal follows.',note:['ops','Qualified and booked. Your sales team walks in knowing the space and volume.']},
+      {read:true}
+    ]},
+  golf:{label:'Golf program',dot:'#CC7400',title:'From an assessment to a 12-week program',
+    blurb:'A Lift owner took the TPI assessment in August. Before the off-season, the agent turns his results into a plan and sells the program in the thread.',
+    beats:[
+      {stamp:'Sun 6:15 PM'},
+      {b:'text',t:'Hi Mark. Your TPI screen showed limited hip rotation, which is often where swing speed gets lost. Want a plan built around it before spring?',note:['ai','The agent uses his TPI assessment results and the time of year.']},
+      {u:['Show me','What does it involve?']},
+      {b:'carousel',items:['golf12','golf1'],btn:'Choose',note:['rcs','Program options as rich cards with prices.']},
+      {u:['12-week program','Start with one month']},
+      {b:'text',t:'Good call for the off-season. It runs on your Lift three times a week, with a check-in from a TPI-certified coach every two weeks.'},
+      {b:'pay',lines:[['12-Week Golf Fitness Program',799]],ship:'Week 1 loads on your FORME Lift Monday',btn:'Pay $799.00',note:['com','Paid in the thread; the program appears on his device.']},
+      {u:['Pay $799.00']},
+      {b:'ok',t:'You\'re in · Week 1 starts Monday',sub:'First session queued on your Lift: rotational mobility, 25 min.'},
+      {read:true}
+    ]},
+  live:{label:'Live 1:1',dot:'#2F7D6B',title:'Book a live coach in three taps',
+    blurb:'A member asks for help with his deadlift form. The agent matches him to the right coach, books a slot and offers the membership that makes it weekly.',
+    beats:[
+      {stamp:'Tue 7:05 AM'},
+      {in:'Can I get a live session with a trainer this week? I want help with my deadlift form.'},
+      {b:'text',t:'Absolutely. Here are coaches who focus on strength technique, all with openings this week.',note:['ai','Matches the request to coach specialties and live availability.']},
+      {b:'carousel',items:['c1','c2','c3'],btn:'Pick'},
+      {u:['Strength coach','Performance coach']},
+      {b:'text',t:'Wednesday 6:30 AM or Thursday 7:00 AM?'},
+      {u:['Wed 6:30 AM','Thu 7:00 AM']},
+      {b:'card',item:'member',title:'Make it weekly',sub:'Personal Training Membership · $149/mo',btns:['Add membership','Just this session'],note:['ai','Upsell offered after the booking, not before.']},
+      {u:['Just this session','Add membership']},
+      {b:'ok',t:'Booked · Wed 6:30 AM, strength coach',sub:'Your session opens on your FORME. Reminder the night before.',note:['ops','Booking and reminders handled by the agent.']},
+      {read:true}
+    ]},
+  winback:{label:'Win-back',dot:'#A64B3C',title:'Bringing a member back',
+    blurb:'Three weeks without a workout. The agent sends a personal, low-effort way back, then suggests the bundle that matches how she trains.',
+    beats:[
+      {stamp:'Thu 5:30 PM'},
+      {b:'text',t:'Hi Priya, it\'s been three weeks since your last barre class. Want an easy way back in? 20 minutes, no equipment.',note:['ai','Inactivity spotted in usage data, with a nudge in her favorite class type.']},
+      {b:'card',item:'k1',title:'Barre Basics · 20 min',sub:'Your most-played class type · ready on your Studio',btns:['Queue it for tonight','Tomorrow morning'],note:['rcs','One tap queues the class on her device.']},
+      {u:['Queue it for tonight','Tomorrow morning']},
+      {b:'ok',t:'Queued for 7:00 PM',sub:'It\'ll be waiting on your FORME Studio.'},
+      {b:'text',t:'You\'ve taken 11 barre classes this year. The Barre Training Bundle adds the integrated barre to your Studio. Want a look?',note:['ai','Cross-sell based on what she actually does.']},
+      {b:'carousel',items:['barre'],btn:'Learn more'},
+      {u:['Tell me more','Maybe later']},
+      {b:'text',t:'I\'ll send the details after tonight\'s class, so you can try the flow first.'},
+      {read:true}
+    ]},
+  hotel:{label:'Hotel guest',dot:'#8A8378',title:'A partner\'s guest becomes a FORME lead',
+    blurb:'For hotel and residential partners, the agent welcomes guests to the FORME in their fitness center, books live sessions and offers a free month at home after the stay.',
+    beats:[
+      {stamp:'Fri 3:12 PM'},
+      {b:'text',t:'Welcome, Alex! Your hotel\'s fitness center has FORME, with on-demand classes and live 1:1 training included in your stay.',note:['ops','Guests use the amenity more, which is why partners renew and expand.']},
+      {u:['What classes are there?','Book a live session']},
+      {b:'carousel',items:['k2','k3','k4'],btn:'Save'},
+      {b:'text',t:'Want a live session with a coach tomorrow before your meetings? I have 6:00 and 6:45 AM open.'},
+      {u:['6:00 AM','6:45 AM']},
+      {b:'ok',t:'Booked · Sat 6:00 AM, fitness center',sub:'Your coach will meet you on the FORME screen.'},
+      {b:'text',t:'After your stay, keep training at home with the FORME app. Want a free first month?',note:['com','A hotel guest becomes a lead for FORME\'s home and app business.']},
+      {u:['Yes, send it','No thanks']},
+      {b:'ok',t:'Free month ready',sub:'Download link sent. Your saved classes carry over.'},
+      {read:true}
+    ]},
+  after:{label:'After the session',dot:'#E3DCD0',title:'Feedback that books the next session',
+    blurb:'Right after a live session, a one-tap survey, the coach\'s notes turned into next steps, and the next booking.',
+    beats:[
+      {stamp:'Wed 7:20 AM'},
+      {b:'text',t:'Great work this morning. How was your session with your strength coach? Tap 1 to 5.',note:['ops','Satisfaction survey in the thread, feeding the beta scorecard.']},
+      {u:['5 ★','4','3']},
+      {b:'text',t:'Love it. Your coach left a note: keep your hips back on the hinge, and add 10 lbs next week. I\'ve queued two form drills on your Lift for Friday.',note:['ai','Coach notes become next steps on his device.']},
+      {u:['Book the same time next week','I\'m good for now']},
+      {b:'ok',t:'Booked · Next Wed 6:30 AM',sub:'Same coach, same time. Reminder the night before.',note:['com','Repeat bookings without anyone on staff touching it.']},
+      {read:true}
+    ]}
+};
+
+/* ---------- player ---------- */
+const $=s=>document.querySelector(s);
+const thread=$('#thread'), chips=$('#chips'), hood=$('#hood');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let cur='demo', idx=0, token=0, auto=false;
+const TAG={rcs:['RCS','p-rcs'],ai:['AI agent','p-ai'],com:['Commerce','p-com'],ops:['Ops','p-ops']};
+
+function el(h){const d=document.createElement('div'); d.innerHTML=h.trim(); return d.firstElementChild;}
+function scroll(){thread.scrollTop=thread.scrollHeight;}
+function price(p){return p.price?`<span class="rc-price">$${p.price}${p.per||''}</span>`:'';}
+function rc(key,btn){const p=P[key];
+  return `<div class="rc"><div class="media">${art(p.g)}</div><div class="rc-body"><span class="rc-name">${p.name}</span>${p.sub?`<span class="rc-sub">${p.sub}</span>`:''}${price(p)}</div><div class="cbtns"><button class="cbtn" type="button" data-act="${btn}">${btn}</button></div></div>`;}
+function money(n){return '$'+n.toFixed(2);}
+
+function render(bt){
+  if(bt.stamp){thread.append(el(`<div class="stamp">${bt.stamp}</div>`));return;}
+  if(bt.read){thread.append(el(`<div class="read">Read</div>`));return;}
+  if(bt.in){thread.append(el(`<div class="row me"><div class="bub">${bt.in}</div></div>`));return;}
+  let h='';
+  if(bt.b==='text') h=`<div class="bub">${bt.t}</div>`;
+  if(bt.b==='carousel') h=`<div class="carousel">${bt.items.map(k=>rc(k,bt.btn)).join('')}</div>`;
+  if(bt.b==='card') h=`<div class="rc wide"><div class="media">${art(P[bt.item].g)}</div><div class="rc-body"><span class="rc-name">${bt.title}</span><span class="rc-sub">${bt.sub}</span></div><div class="cbtns">${bt.btns.map(b=>`<button class="cbtn" type="button" data-act="${b}">${b}</button>`).join('')}</div></div>`;
+  if(bt.b==='pay'){const tot=bt.lines.reduce((a,l)=>a+l[1],0);
+    h=`<div class="receipt"><span class="rc-name">Your order</span>${bt.lines.map(l=>`<div class="ln"><span>${l[0]}</span><span>${money(l[1])}</span></div>`).join('')}<div class="ln tot"><span>Total</span><span>${money(tot)}</span></div><span class="ship">${bt.ship}</span><button class="paybtn" type="button" data-act="${bt.btn}">${bt.btn} · Wallet</button></div>`;}
+  if(bt.b==='ok') h=`<div class="ok"><span class="ck">✓</span><div><b>${bt.t}</b><small>${bt.sub}</small></div></div>`;
+  thread.append(el(`<div class="row">${h}</div>`));
+  if(bt.note) addNote(bt.note);
+}
+function addNote([k,t]){
+  const e=hood.querySelector('.empty'); if(e) e.remove();
+  hood.append(el(`<li><span class="pill ${TAG[k][1]}">${TAG[k][0]}</span><span>${t}</span></li>`));
+}
+function wait(ms,tk){return new Promise(r=>setTimeout(()=>r(tk===token),reduce?Math.min(ms,80):ms));}
+
+async function step(){
+  const tk=token, beats=SC[cur].beats;
+  while(idx<beats.length){
+    const bt=beats[idx];
+    if(bt.u){ showChips(bt.u); if(auto){ if(!await wait(1300,tk))return; choose(bt.u[0]); } return; }
+    if(bt.b){ const t=el(`<div class="row"><div class="bub typing"><span></span><span></span><span></span></div></div>`); thread.append(t); scroll();
+      if(!await wait(bt.b==='text'?750:900,tk)){return;} t.remove(); }
+    else if(bt.in){ if(!await wait(500,tk))return; }
+    render(bt); scroll(); idx++;
+    if(!await wait(450,tk))return;
+  }
+  if(auto){ if(!await wait(2200,tk))return; const keys=Object.keys(SC); select(keys[(keys.indexOf(cur)+1)%keys.length]); }
+}
+function showChips(opts){
+  chips.innerHTML=''; opts.forEach(o=>{const b=el(`<button class="chip" type="button">${o}</button>`); b.onclick=()=>choose(o); chips.append(b);});
+}
+function choose(text){
+  if(!SC[cur].beats[idx]||!SC[cur].beats[idx].u) return;
+  chips.innerHTML='';
+  thread.append(el(`<div class="row me"><div class="bub">${text}</div></div>`)); scroll();
+  idx++; token++; step();
+}
+thread.addEventListener('click',e=>{
+  const a=e.target.closest('[data-act]'); if(!a) return;
+  const bt=SC[cur].beats[idx]; if(bt&&bt.u){ const m=bt.u.find(o=>o===a.dataset.act)||bt.u[0]; choose(m); }
+});
+function select(key){
+  cur=key; idx=0; token++; thread.innerHTML=''; chips.innerHTML='';
+  hood.innerHTML='<li class="empty">Notes appear here as the conversation plays.</li>';
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.k===key));
+  const s=SC[key]; $('#scene').innerHTML=`<h3>${s.title}</h3><p>${s.blurb}</p>`;
+  step();
+}
+Object.entries(SC).forEach(([k,s])=>{
+  const b=el(`<button class="tab" role="tab" type="button" data-k="${k}"><span class="dot" style="background:${s.dot}"></span>${s.label}</button>`);
+  b.onclick=()=>{auto=false; $('#auto').textContent='Autoplay'; select(k);}; $('#tabs').append(b);
+});
+$('#replay').onclick=()=>select(cur);
+$('#auto').onclick=()=>{auto=!auto; $('#auto').textContent=auto?'Stop autoplay':'Autoplay'; if(auto){ const bt=SC[cur].beats[idx]; if(bt&&bt.u) choose(bt.u[0]); else if(idx>=SC[cur].beats.length) select(cur);} };
+$('#rcsprev').innerHTML=['golf12','tpi','lift'].map(k=>rc(k,'Start')).join('');
+
+/* ---------- agent memory module ---------- */
+const MEMBERS={
+  mark:{label:'Mark',sub:'Lift owner, weekend golfer',
+    buy:[['tpi','TPI assessment','August · limited hip rotation flagged'],['golf','Golf First Month','July · finished all sessions'],['program','Rotational power classes','3× a week, mostly Sunday nights']],
+    said:[['"My lower back tightens up after 18 holes."','Text · September'],['"Trying to add distance before spring."','Text · August']],
+    sugg:[['program','12-Week Golf Fitness Program · $799','Built on his TPI results and timed for the off-season, before spring.'],['hyper','Hyperice Recovery Bundle','Answers the lower-back tightness he mentioned, with guided recovery on his Lift.'],['tpi','Live 1:1 with a TPI-certified coach','Checks his rotation every two weeks so the gains stick.']],
+    when:'Sunday evening, after his weekend round. That\'s when he trains and reads our texts.'},
+  priya:{label:'Priya',sub:'Studio owner, barre and Pilates',
+    buy:[['klass','Barre classes','11 this year, her most-played type'],['klass2','Pilates','Weekly, 6 AM weekdays'],['coach3','Live 1:1 Pilates session','June · rated it 5 stars']],
+    said:[['"I want to get stronger without heavy weights."','Text · July'],['"Mornings before work are my only time."','Text · June']],
+    sugg:[['barre','Barre Training Bundle · $395','Her favorite class type, with the integrated barre on her Studio.'],['bench','Fitbench Strength Bundle','Strength without heavy weights, with bench-based programs.'],['membership','Personal Training Membership · $149/mo','She booked one live session and loved it. Weekly 6 AM slots fit her schedule.']],
+    when:'6:00 AM weekdays, right before her usual class.'},
+  club:{label:'Country club',sub:'Commercial partner, one Lift',
+    buy:[['lift','FORME Lift in the hitting bay','Installed last spring'],['golf','Golf programs','Most-used content on the unit'],['cal','Saturday mornings','Booked solid most weeks']],
+    said:[['"Members want their fitness tied to their lessons."','Golf director · call notes'],['"We\'re renovating the fitness room next spring."','GM · email']],
+    sugg:[['lift','A second FORME Lift','Saturday demand already exceeds one unit, and the renovation is the moment to add it.'],['studio','FORME Studio for the fitness room','Classes for members who don\'t golf, in the renovated space.'],['program','Member golf fitness programs','Turns lessons plus training into a paid program, a new revenue line for the club.']],
+    when:'Before the renovation budget is set, with a proposal and a call with their account manager.'}
+};
+function showMember(k){
+  const s=MEMBERS[k];
+  document.querySelectorAll('#who button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));
+  $('#m-buy').innerHTML=s.buy.map(([g,n,d])=>`<li class="buy"><span class="sw">${art(g)}</span><span><b>${n}</b><span>${d}</span></span></li>`).join('');
+  $('#m-said').innerHTML=s.said.map(([q,w])=>`<li class="said">${q}<span>${w}</span></li>`).join('');
+  $('#m-sugg').innerHTML=s.sugg.map(([g,n,why],i)=>`<li class="sugg"><span class="sw">${art(g)}</span><span><span class="rank">Pick ${i+1}</span><b>${n}</b><p class="why">${why}</p></span></li>`).join('');
+  $('#m-when').innerHTML=`<span class="pill p-ai">When</span><span>${s.when}</span>`;
+}
+Object.entries(MEMBERS).forEach(([k,s])=>{
+  const b=el(`<button type="button" data-k="${k}" aria-pressed="false">${s.label}<small>${s.sub}</small></button>`);
+  b.onclick=()=>showMember(k); $('#who').append(b);
+});
+showMember('mark');
+
+select('demo');
+</script>
+
+</body></html>
